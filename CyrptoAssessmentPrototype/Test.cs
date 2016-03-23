@@ -18,8 +18,7 @@ namespace CyrptoAssessment
             }
             set
             {
-                int val = (int)value;
-                if (val != 1 && val % 2 != 0)
+                if (IsSingleTest(value))
                 {
                     throw new Exception("Cannot assign multiple test types to the test instance.");
                 }
@@ -31,7 +30,13 @@ namespace CyrptoAssessment
         }
 
         internal double Result { get; set; }
-        public List<EncriptionData> Pairs { protected get; set; }
+        public IEnumerable<EncriptionData> Pairs { protected get; set; }
         internal abstract void Perform();
+
+        public static bool IsSingleTest(TestTypes type)
+        {
+            int val = (int)type;
+            return (val != 1 && val % 2 != 0) ? true : false;
+        }
     }
 }

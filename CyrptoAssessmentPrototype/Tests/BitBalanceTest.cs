@@ -9,7 +9,7 @@ namespace CyrptoAssessment
     class BitBalanceTest : Test
     {
         // Dummy implementation - do przemyślenia i poprawy - tymczasowe dla testów.
-        BitBalanceTest(List<EncriptionData> pairs)
+        internal BitBalanceTest(IEnumerable<EncriptionData> pairs)
         {
             this.Pairs = pairs;
             this.Type = TestTypes.BitBalance;
