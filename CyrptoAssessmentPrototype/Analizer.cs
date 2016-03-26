@@ -11,12 +11,12 @@ namespace CyrptoAssessment
     /// </summary>
     public class Analizer
     {
-        private IEncriptable Algorithm;
-        private EncriptionDataGenerator DataGenerator;
-        private TestInitializer TestInitializer;
-        private TestTypes InitializedTypes;
-        private List<Test> Tests;
-        private List<EncriptionData> EncData;
+        private IEncriptable m_Algorithm;
+        private EncriptionDataGenerator m_DataGenerator;
+        private TestInitializer m_TestInitializer;
+        private TestTypes m_InitializedTypes;
+        private List<Test> m_Tests;
+        private List<EncriptionData> m_EncData;
 
         /// <summary>
         /// Creates and initializates Analizer class.
@@ -24,12 +24,12 @@ namespace CyrptoAssessment
         /// <param name="alg">Algorithm to be analized.</param>
         public Analizer(IEncriptable alg)
         {
-            Algorithm = alg;
-            DataGenerator = new EncriptionDataGenerator(Algorithm);
-            TestInitializer = new TestInitializer();
-            InitializedTypes = TestTypes.None;
-            Tests = new List<Test>();
-            EncData = new List<EncriptionData>();
+            m_Algorithm = alg;
+            m_DataGenerator = new EncriptionDataGenerator(m_Algorithm);
+            m_TestInitializer = new TestInitializer();
+            m_InitializedTypes = TestTypes.None;
+            m_Tests = new List<Test>();
+            m_EncData = new List<EncriptionData>();
         }
 
         /// <summary>
@@ -38,11 +38,11 @@ namespace CyrptoAssessment
         /// <param name="types">Types of tests to be performed.</param>
         public void Run(TestTypes types)
         {
-            int newTypes = types - InitializedTypes;
+            int newTypes = types - m_InitializedTypes;
             TestTypes typesToInit = (newTypes > 0) ? (TestTypes)newTypes : TestTypes.None;
-            EncData.AddRange(DataGenerator.Invoke(typesToInit));
-            Tests.AddRange(TestInitializer.Invoke(typesToInit, EncData));
-            InitializedTypes = (TestTypes)(InitializedTypes + newTypes);
+            m_EncData.AddRange(m_DataGenerator.Invoke(typesToInit));
+            m_Tests.AddRange(m_TestInitializer.Invoke(typesToInit, m_EncData));
+            m_InitializedTypes = (TestTypes)(m_InitializedTypes + newTypes);
             PerformTests();
         }
 
@@ -50,7 +50,7 @@ namespace CyrptoAssessment
         {
             // Tymczasowa implementacja:
             // Tu nie może być wyświetlania - na razie w celu debugu
-            foreach (var test in Tests)
+            foreach (var test in m_Tests)
             {
                 Console.WriteLine(test.Result);
             }
@@ -67,7 +67,7 @@ namespace CyrptoAssessment
         private void PerformTests()
         {
             // Tutaj tez jakoś asynchronicznie. Żeby każdy test miał osoby task i na końcu await. 
-            foreach (var test in Tests)
+            foreach (var test in m_Tests)
             {
                 test.Perform();
             }

@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,9 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analizer.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Generators\RandomGenerator.cs" />
     <Compile Include="Generators\SacGenerator.cs" />
     <Compile Include="Generators\SequenceGenerator.cs" />
+    <Compile Include="Helpers\EnumUtil.cs" />
     <Compile Include="Tests\BitBalanceTest.cs" />
     <Compile Include="EncriptionData.cs" />
     <Compile Include="EncriptionDataGenerator.cs" />

@@ -13,7 +13,7 @@ namespace OutSideNamespace
         static void Main(string[] args)
         {
             Analizer desAnalizer = new Analizer(new DesEncriptor(8,8));
-            desAnalizer.Run(TestTypes.BitBalance | TestTypes.KeyLength);
+            desAnalizer.Run(TestTypes.All);
             desAnalizer.GetResults();
             Console.ReadKey();
         }

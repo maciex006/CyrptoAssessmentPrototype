@@ -18,5 +18,6 @@ namespace CyrptoAssessment
         Nonlinearity = 8,
         SacInput = 16,
         SacKey = 32,
+        All = 63
     }
 }

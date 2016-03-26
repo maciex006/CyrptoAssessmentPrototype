@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,27 +10,41 @@ namespace CyrptoAssessment
 {
     class EncriptionDataGenerator
     {
-        private IEncriptable Algorithm;
+        private IEncriptable m_Algorithm;
 
         internal EncriptionDataGenerator(IEncriptable alg)
         {
-            Algorithm = alg;
+            m_Algorithm = alg;
         }
 
         internal List<EncriptionData> Invoke(TestTypes tests)
         {
-            // To można by dać do pliku konfiguracyjnego:
-            // 30k losowych par dla zrównoważenia.
-            // 5k losowych par dla 20 x różnych kluczy dla nieliniowości.
-            // input.Length sekwencji SAC dla 20 x różnych kluczy dla SACinput
-            // key.Length sekwencji SAC dla 20 x różnych wejść dla SACkey
+            List<EncriptionData> enc = new List<EncriptionData>();
 
+            if ((tests & TestTypes.BitBalance) != 0)
+            {
+                enc.AddRange(RandomGenerator.Invoke(Configuration.BalanceGenPairs, m_Algorithm));
+            }
 
-            Random r = new Random();
-            byte[] key = new byte[Algorithm.KeySize];
-            r.NextBytes(key);
-            List<EncriptionData> enc = SacGenerator.InvokeFixedInput(Algorithm, key);
-            return RandomGenerator.Invoke(30000, Algorithm, tests);
+            if ((tests & TestTypes.Nonlinearity) != 0)
+            {
+                enc.AddRange(RandomGenerator.InvokeGeneratedKeys(
+                    Configuration.NonlinGenPars,
+                    Configuration.NonlinGenKeys, 
+                    m_Algorithm));
+            }
+
+            if ((tests & TestTypes.SacInput) != 0)
+            {
+                enc.AddRange(SacGenerator.InvokeGeneratedKeys(Configuration.SacInputGenKeys, m_Algorithm));
+            }
+
+            if ((tests & TestTypes.SacKey) != 0)
+            {
+                enc.AddRange(SacGenerator.InvokeGeneratedInputs(Configuration.SacKeyGenInputs, m_Algorithm));
+            }
+
+            return enc;
 
             // asynchronicznie?
         }

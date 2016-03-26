@@ -1,13 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CyrptoAssessment.Helpers;
 
 namespace CyrptoAssessment.Generators
 {
-    class SacGenerator
+    internal static class SacGenerator
     {
+        private static TestTypes m_sacInputAssignedTests = TestTypes.None;
+        private static TestTypes m_sacKeyAssignedTests = TestTypes.None;
+
+        static SacGenerator()
+        {
+            m_sacInputAssignedTests = Configuration.SacInputGeneratorMapping;
+            m_sacKeyAssignedTests = Configuration.SacKeyGeneratorMapping;
+            //m_AssignedTests = ConfigurationSettings.AppSettings["sacGeneratorMapping"].ToEnum(TestTypes.None);
+        }
+
+        // Dla sacInput
+        internal static List<EncriptionData> InvokeGeneratedKeys(int usedKeysCount, IEncriptable Algorithm)
+        {
+            List<EncriptionData> output = new List<EncriptionData>();
+            for(int i = 0; i < usedKeysCount; i++)
+            {
+                byte[] key = new byte[Algorithm.KeySize];
+                SequenceGenerator.Invoke(key);
+                output.AddRange(InvokeFixedKey(Algorithm, key));
+            }
+
+            return output;
+        }
+
+        // Dla sacKey
+        internal static List<EncriptionData> InvokeGeneratedInputs(int usedInputsCount, IEncriptable Algorithm)
+        {
+            List<EncriptionData> output = new List<EncriptionData>();
+            for (int i = 0; i < usedInputsCount; i++)
+            {
+                byte[] input = new byte[Algorithm.BlockSize];
+                SequenceGenerator.Invoke(input);
+                output.AddRange(InvokeFixedInput(Algorithm, input));
+            }
+
+            return output;
+        }
+
+        // Dla sacInput
         internal static List<EncriptionData> InvokeFixedKey(IEncriptable Algorithm, byte[] key)
         {
             // Dodać unique key id generator.
@@ -23,13 +64,14 @@ namespace CyrptoAssessment.Generators
                     Algorithm.Input = input;
                     Algorithm.Key = key;
                     Algorithm.Run();
-                    output.Add(new EncriptionData(input, Algorithm.Output, key, TestTypes.SacInput));
+                    output.Add(new EncriptionData(input, Algorithm.Output, key, m_sacInputAssignedTests));
                 }
             }
 
             return output;
         }
 
+        // Dla sacKey
         internal static List<EncriptionData> InvokeFixedInput(IEncriptable Algorithm, byte[] input)
         {
             byte[] key = new byte[Algorithm.KeySize];
@@ -46,7 +88,7 @@ namespace CyrptoAssessment.Generators
                         Algorithm.Input = input;
                         Algorithm.Key = key;
                         Algorithm.Run();
-                        output.Add(new EncriptionData(input, Algorithm.Output, key, TestTypes.SacInput));
+                        output.Add(new EncriptionData(input, Algorithm.Output, key, m_sacKeyAssignedTests));
                     }
                     catch (Exception)
                     {
