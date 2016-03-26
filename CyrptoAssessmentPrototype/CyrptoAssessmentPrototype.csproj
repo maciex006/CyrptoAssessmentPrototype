@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analizer.cs" />
+    <Compile Include="Generators\RandomGenerator.cs" />
+    <Compile Include="Generators\SacGenerator.cs" />
+    <Compile Include="Generators\SequenceGenerator.cs" />
     <Compile Include="Tests\BitBalanceTest.cs" />
     <Compile Include="EncriptionData.cs" />
     <Compile Include="EncriptionDataGenerator.cs" />

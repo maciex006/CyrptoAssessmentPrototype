@@ -15,6 +15,8 @@ namespace CyrptoAssessment
         KeyLength = 1,
         Randomness = 2,
         BitBalance = 4,
-        Nonlinearity = 8
+        Nonlinearity = 8,
+        SacInput = 16,
+        SacKey = 32,
     }
 }

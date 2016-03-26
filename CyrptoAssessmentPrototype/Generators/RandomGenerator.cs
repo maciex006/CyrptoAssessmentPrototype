@@ -8,22 +8,57 @@ namespace CyrptoAssessment.Generators
 {
     static class RandomGenerator
     {
-        internal static List<EncriptionData> InvokeFixedKey(byte[] key)
+        internal static List<EncriptionData> InvokeFixedKey(int reqDataCount, IEncriptable Algorithm, byte[] key, TestTypes testTypes)
         {
-            //TODO: implement
-            return null;
+            Byte[] input = new Byte[Algorithm.BlockSize];
+            List<EncriptionData> output = new List<EncriptionData>();
+
+            for (int i = 0; i < reqDataCount; i++)
+            {
+                SequenceGenerator.Invoke(input);
+                Algorithm.Input = input;
+                Algorithm.Key = key;
+                Algorithm.Run();
+                output.Add(new EncriptionData(input, Algorithm.Output, key, testTypes));
+            }
+
+            return output;
         }
 
-        internal static List<EncriptionData> InvokeFixedInput(byte[] input)
+        internal static List<EncriptionData> InvokeFixedInput(int reqDataCount, IEncriptable Algorithm, byte[] input, TestTypes testTypes)
         {
-            //TODO: implement
-            return null;
+            Byte[] key = new Byte[Algorithm.KeySize];
+            List<EncriptionData> output = new List<EncriptionData>();
+
+            for (int i = 0; i < reqDataCount; i++)
+            {
+                SequenceGenerator.Invoke(key);
+                Algorithm.Input = input;
+                Algorithm.Key = key;
+                Algorithm.Run();
+                output.Add(new EncriptionData(input, Algorithm.Output, key, testTypes));
+            }
+
+            return output;
         }
 
-        internal static List<EncriptionData> Invoke()
+        internal static List<EncriptionData> Invoke(int reqDataCount, IEncriptable Algorithm, TestTypes testTypes)
         {
-            //TODO: implement
-            return null;
+            Byte[] key = new Byte[Algorithm.KeySize];
+            Byte[] input = new Byte[Algorithm.BlockSize];
+            List<EncriptionData> output = new List<EncriptionData>();
+
+            for (int i = 0; i < reqDataCount; i++)
+            {
+                SequenceGenerator.Invoke(input);
+                SequenceGenerator.Invoke(key);
+                Algorithm.Input = input;
+                Algorithm.Key = key;
+                Algorithm.Run();
+                output.Add(new EncriptionData(input, Algorithm.Output, key, testTypes));
+            }
+
+            return output;
         }
     }
 }
