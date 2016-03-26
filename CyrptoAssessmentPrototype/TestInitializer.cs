@@ -12,7 +12,7 @@ namespace CyrptoAssessment
         {
             if((tests & TestTypes.KeyLength) != 0)
             {
-                Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.KeyLength) != 0));
+                //Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.KeyLength) != 0));
             }
 
             if((tests & TestTypes.BitBalance) != 0)
@@ -22,9 +22,23 @@ namespace CyrptoAssessment
 
             if((tests & TestTypes.Nonlinearity) != 0)
             {
-                Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.Nonlinearity) != 0));
+                //Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.Nonlinearity) != 0));
             }
 
+            if ((tests & TestTypes.Randomness) != 0)
+            {
+                //Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.Randomness) != 0));
+            }
+
+            if ((tests & TestTypes.SacInput) != 0)
+            {
+                //Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.Randomness) != 0));
+            }
+
+            if ((tests & TestTypes.SacKey) != 0)
+            {
+                //Test bitBalanceTest = new BitBalanceTest(data.Where(x => (x.TestType & TestTypes.Randomness) != 0));
+            }
             // Tutaj uzupełnić też pola list EncriptionData w każdym z testów (jakoś sensownie żeby nie powtarzać instrukcji)
             //TODO: implement.
             return new List<Test>();

@@ -74,12 +74,19 @@ namespace CyrptoAssessment.Generators
 
             for (int i = 0; i < reqDataCount; i++)
             {
-                SequenceGenerator.Invoke(input);
-                SequenceGenerator.Invoke(key);
-                Algorithm.Input = input;
-                Algorithm.Key = key;
-                Algorithm.Run();
-                output.Add(new EncriptionData(input, Algorithm.Output, key, m_fullRandomAssignedTests));
+                try
+                {
+                    SequenceGenerator.Invoke(input);
+                    SequenceGenerator.Invoke(key);
+                    Algorithm.Input = input;
+                    Algorithm.Key = key;
+                    Algorithm.Run();
+                    output.Add(new EncriptionData(input, Algorithm.Output, key, m_fullRandomAssignedTests));
+                }
+                catch (Exception)
+                {
+                    //Do nothing.
+                }
             }
 
             return output;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CyrptoAssessment.Generators;
+using System.Diagnostics;
 
 namespace CyrptoAssessment
 {
@@ -17,36 +18,73 @@ namespace CyrptoAssessment
             m_Algorithm = alg;
         }
 
-        internal List<EncriptionData> Invoke(TestTypes tests)
+        internal IEnumerable<EncriptionData> Invoke(TestTypes tests)
         {
-            List<EncriptionData> enc = new List<EncriptionData>();
+            // Przemyslec czemu byte[] idzie po referencji a nie value.
+            // Może dodać możliwość wyboru między wywołaniem multithread a zwykłym.
+
+#if DEBUG
+            Stopwatch sw = Stopwatch.StartNew();
+#endif
+            List<Task<List<EncriptionData>>> tasks = new List<Task<List<EncriptionData>>>();
 
             if ((tests & TestTypes.BitBalance) != 0)
             {
-                enc.AddRange(RandomGenerator.Invoke(Configuration.BalanceGenPairs, m_Algorithm));
+                Task <List<EncriptionData>> task = new Task<List<EncriptionData>>(InvokeBitBalance);
+                tasks.Add(task);
+                task.Start();
             }
 
             if ((tests & TestTypes.Nonlinearity) != 0)
             {
-                enc.AddRange(RandomGenerator.InvokeGeneratedKeys(
-                    Configuration.NonlinGenPars,
-                    Configuration.NonlinGenKeys, 
-                    m_Algorithm));
+                Task<List<EncriptionData>> task = new Task<List<EncriptionData>>(InvokeNonlinearity);
+                tasks.Add(task);
+                task.Start();
             }
 
             if ((tests & TestTypes.SacInput) != 0)
             {
-                enc.AddRange(SacGenerator.InvokeGeneratedKeys(Configuration.SacInputGenKeys, m_Algorithm));
+                Task<List<EncriptionData>> task = new Task<List<EncriptionData>>(InvokeSacInput);
+                tasks.Add(task);
+                task.Start();
             }
 
             if ((tests & TestTypes.SacKey) != 0)
             {
-                enc.AddRange(SacGenerator.InvokeGeneratedInputs(Configuration.SacKeyGenInputs, m_Algorithm));
+                Task<List<EncriptionData>> task = new Task<List<EncriptionData>>(InvokeSacKey);
+                tasks.Add(task);
+                task.Start();
             }
 
-            return enc;
+            Task.WaitAll(tasks.ToArray());
+#if DEBUG
+            sw.Stop();
+            Console.WriteLine("Generation time: " + sw.Elapsed);
+#endif
+            return tasks.SelectMany(task => task.Result);
+        }
 
-            // asynchronicznie?
+        private List<EncriptionData> InvokeBitBalance()
+        {
+            return RandomGenerator.Invoke(Configuration.BalanceGenPairs, m_Algorithm.Duplicate());
+        }
+
+        private List<EncriptionData> InvokeNonlinearity()
+        {
+            return RandomGenerator.InvokeGeneratedKeys(
+                    Configuration.NonlinGenPars,
+                    Configuration.NonlinGenKeys,
+                    m_Algorithm.Duplicate());
+        }
+
+        private List<EncriptionData> InvokeSacInput()
+        {
+            return SacGenerator.InvokeGeneratedKeys(Configuration.SacInputGenKeys, m_Algorithm.Duplicate());
+        }
+
+        private List<EncriptionData> InvokeSacKey()
+        {
+            return SacGenerator.InvokeGeneratedInputs(Configuration.SacKeyGenInputs, m_Algorithm.Duplicate());
         }
     }
 }

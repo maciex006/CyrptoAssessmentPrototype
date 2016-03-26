@@ -14,9 +14,9 @@ namespace CyrptoAssessment
     {
         internal EncriptionData(byte[] plainText, byte[] cypherText, byte[] key, TestTypes testType, int? uniqueKeyId = null)
         {
-            PlainText = plainText;
-            CypherText = cypherText;
-            Key = key;
+            PlainText = (byte[])plainText.Clone();
+            CypherText = (byte[])cypherText.Clone();
+            Key = (byte[])key.Clone();
             TestType = testType;
             UniqueKeyId = uniqueKeyId;
         }

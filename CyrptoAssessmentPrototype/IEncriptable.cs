@@ -18,5 +18,6 @@ namespace CyrptoAssessment
         byte[] Output { get; }
         byte[] Key { get; set; }
         void Run();
+        IEncriptable Duplicate();
     }
 }

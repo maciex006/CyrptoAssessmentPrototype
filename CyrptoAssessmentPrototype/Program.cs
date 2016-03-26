@@ -46,5 +46,10 @@ namespace OutSideNamespace
             ICryptoTransform xfrm = desCSP.CreateEncryptor();
             Output = xfrm.TransformFinalBlock(Input, 0, Input.Length);
         }
+
+        public IEncriptable Duplicate()
+        {
+            return new DesEncriptor(BlockSize, KeySize);
+        }
     }
 }
