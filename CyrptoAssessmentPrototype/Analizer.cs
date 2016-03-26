@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace CyrptoAssessment
 {
+    /// <summary>
+    /// Class used for analizing cryptographic algorithm.
+    /// </summary>
     public class Analizer
     {
         private IEncriptable Algorithm;
@@ -15,6 +18,10 @@ namespace CyrptoAssessment
         private List<Test> Tests;
         private List<EncriptionData> EncData;
 
+        /// <summary>
+        /// Creates and initializates Analizer class.
+        /// </summary>
+        /// <param name="alg">Algorithm to be analized.</param>
         public Analizer(IEncriptable alg)
         {
             Algorithm = alg;
@@ -25,6 +32,10 @@ namespace CyrptoAssessment
             EncData = new List<EncriptionData>();
         }
 
+        /// <summary>
+        /// Runs testing procedure.
+        /// </summary>
+        /// <param name="types">Types of tests to be performed.</param>
         public void Run(TestTypes types)
         {
             int newTypes = types - InitializedTypes;
@@ -50,8 +61,12 @@ namespace CyrptoAssessment
             // TODO
         }
 
+        /// <summary>
+        /// Method handling running tests.
+        /// </summary>
         private void PerformTests()
         {
+            // Tutaj tez jakoś asynchronicznie. Żeby każdy test miał osoby task i na końcu await. 
             foreach (var test in Tests)
             {
                 test.Perform();

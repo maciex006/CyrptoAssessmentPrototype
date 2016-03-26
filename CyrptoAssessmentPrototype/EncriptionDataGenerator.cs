@@ -18,6 +18,7 @@ namespace CyrptoAssessment
         internal List<EncriptionData> Invoke(TestTypes tests)
         {
             // TODO: implement.
+            // Może asynchronicznie? Dla każdej generacji osobny task, na końcu await aż wszystkie się skończą?
             return new List<EncriptionData>();
         }
     }
