@@ -29,7 +29,7 @@ namespace CyrptoAssessment
             }
         }
 
-        internal double Result { get; set; }
+        internal TestResult Result { get; set; }
         public IEnumerable<EncriptionData> Pairs { protected get; set; }
         internal abstract void Perform();
 

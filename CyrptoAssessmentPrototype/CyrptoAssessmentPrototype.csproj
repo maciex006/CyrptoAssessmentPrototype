@@ -47,7 +47,9 @@
     <Compile Include="Generators\RandomGenerator.cs" />
     <Compile Include="Generators\SacGenerator.cs" />
     <Compile Include="Generators\SequenceGenerator.cs" />
+    <Compile Include="Generators\UniqueKeyIdGenerator.cs" />
     <Compile Include="Helpers\EnumUtil.cs" />
+    <Compile Include="TestResult.cs" />
     <Compile Include="Tests\BitBalanceTest.cs" />
     <Compile Include="EncriptionData.cs" />
     <Compile Include="EncriptionDataGenerator.cs" />
@@ -55,11 +57,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Test.cs" />
-    <Compile Include="TestInitializer.cs" />
+    <Compile Include="TestUtil.cs" />
+    <Compile Include="Tests\NonlinearityTest.cs" />
     <Compile Include="TestTypes.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

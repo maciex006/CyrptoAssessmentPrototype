@@ -26,13 +26,13 @@ namespace CyrptoAssessment.Generators
             {
                 byte[] key = new byte[Algorithm.KeySize];
                 SequenceGenerator.Invoke(key);
-                output.AddRange(InvokeFixedKey(reqDataForEachKey, Algorithm, key));
+                output.AddRange(InvokeFixedKey(reqDataForEachKey, Algorithm, key, UniqueKeyIdGenerator.Get()));
             }
 
             return output;
         }
 
-        internal static List<EncriptionData> InvokeFixedKey(int reqDataCount, IEncriptable Algorithm, byte[] key)
+        internal static List<EncriptionData> InvokeFixedKey(int reqDataCount, IEncriptable Algorithm, byte[] key, int? keyId = null)
         {
             Byte[] input = new Byte[Algorithm.BlockSize];
             List<EncriptionData> output = new List<EncriptionData>();
@@ -43,7 +43,7 @@ namespace CyrptoAssessment.Generators
                 Algorithm.Input = input;
                 Algorithm.Key = key;
                 Algorithm.Run();
-                output.Add(new EncriptionData(input, Algorithm.Output, key, m_randomInputAssignedTests));
+                output.Add(new EncriptionData(input, Algorithm.Output, key, m_randomInputAssignedTests, keyId));
             }
 
             return output;

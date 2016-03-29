@@ -13,7 +13,7 @@ namespace CyrptoAssessment
     {
         private IEncriptable m_Algorithm;
         private EncriptionDataGenerator m_DataGenerator;
-        private TestInitializer m_TestInitializer;
+        private TestUtil m_TestUtility;
         private TestTypes m_InitializedTypes;
         private List<Test> m_Tests;
         private List<EncriptionData> m_EncData;
@@ -26,7 +26,7 @@ namespace CyrptoAssessment
         {
             m_Algorithm = alg;
             m_DataGenerator = new EncriptionDataGenerator(m_Algorithm);
-            m_TestInitializer = new TestInitializer();
+            m_TestUtility = new TestUtil();
             m_InitializedTypes = TestTypes.None;
             m_Tests = new List<Test>();
             m_EncData = new List<EncriptionData>();
@@ -41,9 +41,9 @@ namespace CyrptoAssessment
             int newTypes = types - m_InitializedTypes;
             TestTypes typesToInit = (newTypes > 0) ? (TestTypes)newTypes : TestTypes.None;
             m_EncData.AddRange(m_DataGenerator.Invoke(typesToInit));
-            m_Tests.AddRange(m_TestInitializer.Invoke(typesToInit, m_EncData));
+            m_Tests.AddRange(m_TestUtility.Init(typesToInit, m_EncData));
             m_InitializedTypes = (TestTypes)(m_InitializedTypes + newTypes);
-            PerformTests();
+            m_TestUtility.Run(m_Tests);
         }
 
         public void GetResults()
@@ -59,18 +59,6 @@ namespace CyrptoAssessment
         public void GetResults(TestTypes types)
         {
             // TODO
-        }
-
-        /// <summary>
-        /// Method handling running tests.
-        /// </summary>
-        private void PerformTests()
-        {
-            // Tutaj tez jakoś asynchronicznie. Żeby każdy test miał osoby task i na końcu await. 
-            foreach (var test in m_Tests)
-            {
-                test.Perform();
-            }
         }
     }
 }
